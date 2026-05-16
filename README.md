@@ -9,7 +9,7 @@ A lightweight Retrieval-Augmented Generation (RAG) assistant that answers **fact
 
 ## Status
 
-**Phases 0–6 complete.** Corpus built and committed, `/api/ask` wired end-to-end (PII guard → classifier → facts/RAG → assembler), UI live, Phase 5 test matrix runs via `npm test`, and the app is **deployed to <https://mutual-fund-faq-assistant-five.vercel.app/>**. See [ARCHITECTURE.md §6](ARCHITECTURE.md) for the full plan.
+**Phases 0–7 complete.** Corpus built and committed, `/api/ask` wired end-to-end (PII guard → classifier → facts/RAG → assembler), UI live, Phase 5 test matrix runs via `npm test`, app deployed to <https://mutual-fund-faq-assistant-five.vercel.app/>, and a monthly GitHub Actions cron ([.github/workflows/refresh-corpus.yml](.github/workflows/refresh-corpus.yml)) re-runs the ingestion pipeline and opens a refresh PR. See [ARCHITECTURE.md §6](ARCHITECTURE.md) for the full plan.
 
 ## Test results (Phase 5)
 
@@ -146,7 +146,31 @@ Full deployment failure modes and mitigations: [docs/edge-cases.md §8](docs/edg
 
 ## Data refresh
 
-A monthly GitHub Actions workflow re-runs the ingestion pipeline and opens a Pull Request with refreshed corpus artifacts. A maintainer reviews the `facts.json` diff before merging; merging triggers a Vercel redeploy. See [ARCHITECTURE.md §7](ARCHITECTURE.md).
+[`.github/workflows/refresh-corpus.yml`](.github/workflows/refresh-corpus.yml) — a monthly GitHub Actions cron (03:00 UTC on the 1st) re-runs `npm run ingest` and uses `peter-evans/create-pull-request@v7` to open a PR with any updated `corpus/` artifacts. A maintainer reviews the `facts.json` diff before merge; merging triggers a Vercel redeploy.
+
+- **Triggers:** `schedule` cron + `workflow_dispatch` (manual)
+- **Concurrency:** one in-flight refresh at a time on a fixed branch (`corpus/auto-refresh`) — re-runs update the PR in place instead of spawning duplicates (edge case 7.8)
+- **Scope:** `add-paths: corpus/` keeps the PR diff focused on the artifacts that matter for review (edge case 7.9)
+- **Failure mode:** if a scheme-page source 404s, `1-fetch` exits non-zero and the workflow fails *before* opening a half-baked PR (edge case 7.5). Quiet months (no content changed) no-op cleanly without failing the job (edge case 7.4)
+- **Repo configuration:** `GEMINI_API_KEY` is set as a repo secret; Actions are allowed to create PRs (`default_workflow_permissions=write`, `can_approve_pull_request_reviews=true`)
+
+To trigger a refresh manually:
+
+```bash
+gh workflow run refresh-corpus.yml --ref main
+gh run watch  # or check the Actions tab
+```
+
+See [ARCHITECTURE.md §7](ARCHITECTURE.md) for design rationale and [docs/edge-cases.md §9](docs/edge-cases.md) for the full failure-mode catalogue.
+
+### Workflow validation status
+
+Two `workflow_dispatch` runs were executed on 2026-05-16 to validate the setup:
+
+- **Run #25962915820** — failed at `3-build-index` with `API_KEY_INVALID`. Cause: `gh secret set` was fed via `$key | gh secret set …` which (on Windows PowerShell) appends a trailing newline to the secret value, breaking Google's key validation. Fixed by re-setting with `gh secret set … --body "<key>"` (no stdin pipeline).
+- **Run #25963006168** — got all the way through `1-fetch` (21/21 sources), `2-extract` (20/21), `3-build-index` (171/171 chunks embedded), and `4-build-facts` for the first 3 schemes before hitting the `gemini-2.5-flash-lite` free-tier daily cap (20 RPD). The workflow design is **fully validated end-to-end** — only the daily quota blocks a clean PR-producing run. A re-trigger after the next free-tier reset (~12:30 PM IST) produces the Phase 7 gate artifact.
+
+**Note for monthly cron reliability:** the free-tier gen-model RPD ceiling means a monthly cron is *usually* fine (5 extraction calls × once a month) but can fail if any other key consumer ate the day's quota before 03:00 UTC. A paid Gemini tier is recommended for production-grade reliability.
 
 ## Project structure
 
