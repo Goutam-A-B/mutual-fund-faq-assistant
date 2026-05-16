@@ -1,0 +1,96 @@
+# Phase 7 — Scheduled corpus refresh.
+# Re-runs the same offline ingestion pipeline used locally (npm run ingest)
+# on the 1st of each month and opens a PR with any updated corpus/ artifacts.
+# A maintainer reviews the facts.json diff before merging — see
+# ARCHITECTURE.md §7 and docs/edge-cases.md §9.
+
+name: Refresh corpus
+
+on:
+  schedule:
+    # 03:00 UTC on the 1st of every month (≈ 08:30 IST).
+    # Cron is always UTC on GitHub — edge case 7.11.
+    - cron: "0 3 1 * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+# A single in-flight refresh at a time — prevents the cron and a manual
+# workflow_dispatch from racing on the same branch (edge case 7.8).
+concurrency:
+  group: refresh-corpus
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Playwright needs its browser binaries + Linux system libraries
+      # (edge case 7.1). --with-deps installs both.
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      # Same pipeline as `npm run ingest` locally: 1-fetch → 2-extract →
+      # 3-build-index → 4-build-facts. 1-fetch fails the job loudly if any
+      # scheme-page 404s (edge case 7.5); non-critical source failures only
+      # warn. 3-build-index respects the per-chunk embedding cache so a
+      # re-run only re-embeds chunks whose content actually changed
+      # (edge case 7.12).
+      - name: Run ingestion pipeline
+        run: npm run ingest
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      # peter-evans/create-pull-request no-ops cleanly when nothing changed,
+      # so a quiet month doesn't fail the job (edge case 7.4).
+      #
+      # `add-paths: corpus/` scopes the PR diff to corpus artifacts — keeps
+      # the review focused on facts.json instead of any incidental noise
+      # (edge case 7.9).
+      #
+      # The fixed branch name + concurrency guard above mean a re-run
+      # updates the existing PR in-place rather than spawning a parallel
+      # one. `delete-branch: true` cleans up after merge.
+      - name: Open refresh PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: corpus/auto-refresh
+          delete-branch: true
+          add-paths: corpus/
+          title: "chore: scheduled corpus refresh"
+          commit-message: "chore: refresh corpus artifacts"
+          assignees: ${{ github.repository_owner }}
+          labels: |
+            corpus-refresh
+            automated
+          body: |
+            Automated monthly corpus refresh.
+
+            **Review the `corpus/facts.json` diff carefully before merging.**
+            The numeric facts (expense ratio, exit load, min SIP, lock-in,
+            riskometer, benchmark) are the highest-risk artifact — a bad
+            parse of a refreshed scheme page can quietly ship a wrong
+            number to production. The `add-paths: corpus/` scope keeps
+            this PR focused on those changes; the embedding/index updates
+            are mechanical.
+
+            If a source 404'd, the job will have failed before reaching
+            this step — check the workflow logs.
+
+            Edge cases this PR exists to mitigate: 7.13 (LLM mis-parse),
+            2.8 (cross-scheme contamination), 2.17 (silent layout-break).
