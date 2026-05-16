@@ -1,6 +1,6 @@
 # Phase 7 — Scheduled corpus refresh.
 # Re-runs the same offline ingestion pipeline used locally (npm run ingest)
-# on the 1st of each month and opens a PR with any updated corpus/ artifacts.
+# every weekday morning and opens a PR with any updated corpus/ artifacts.
 # A maintainer reviews the facts.json diff before merging — see
 # ARCHITECTURE.md §7 and docs/edge-cases.md §9.
 
@@ -8,9 +8,10 @@ name: Refresh corpus
 
 on:
   schedule:
-    # 03:00 UTC on the 1st of every month (≈ 08:30 IST).
-    # Cron is always UTC on GitHub — edge case 7.11.
-    - cron: "0 3 1 * *"
+    # 03:30 UTC, Mon–Fri (= 09:00 IST). Cron is always UTC on GitHub
+    # (edge case 7.11). Weekdays-only keeps the weekend PR queue quiet
+    # and the daily gen-model quota burn predictable.
+    - cron: "30 3 * * 1-5"
   workflow_dispatch: {}
 
 permissions:

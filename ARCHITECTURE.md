@@ -240,7 +240,7 @@
 
 The offline pipeline is the same code whether run locally or in CI. A cron workflow re-runs it and proposes the result as a **Pull Request** — never a direct push to `main`.
 
-- **Triggers:** `schedule` cron (monthly — HDFC factsheets publish monthly) + `workflow_dispatch` for manual/test runs.
+- **Triggers:** `schedule` cron + `workflow_dispatch` for manual/test runs. **Cadence deviation:** the original design was monthly (mirroring HDFC's factsheet publication); during Phase 7 this was changed to **weekdays at 09:00 IST (`30 3 * * 1-5` UTC)** at user request — faster scrape-break detection at the cost of more PRs to review. Run-in-place via the fixed `corpus/auto-refresh` branch + concurrency guard keeps the PR queue at one open PR rather than 5/week.
 - **Flow:** checkout → install deps → install Chromium → `npm run ingest` → if `corpus/` changed, open a PR with the diff.
 - **Human gate:** numeric facts (`facts.json`) are the highest-risk artifact. A maintainer reviews the PR diff before merging — a bad parse can't silently reach production. On merge to `main`, Vercel auto-redeploys.
 - **Secrets:** `GEMINI_API_KEY` (repo secret) — needed for the embedding step in `3-build-index`.
