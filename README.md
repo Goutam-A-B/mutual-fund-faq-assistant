@@ -9,7 +9,7 @@ A lightweight Retrieval-Augmented Generation (RAG) assistant that answers **fact
 
 ## Status
 
-**Phases 0–7 complete.** Corpus built and committed, `/api/ask` wired end-to-end (PII guard → classifier → facts/RAG → assembler), UI live, Phase 5 test matrix runs via `npm test`, app deployed to <https://mutual-fund-faq-assistant-five.vercel.app/>, and a weekday GitHub Actions cron ([.github/workflows/refresh-corpus.yml](.github/workflows/refresh-corpus.yml)) re-runs the ingestion pipeline and opens a refresh PR. See [ARCHITECTURE.md §6](ARCHITECTURE.md) for the full plan.
+**All 9 phases complete (0–8).** Corpus built and committed, `/api/ask` wired end-to-end (PII guard → classifier → facts/RAG → assembler), UI live, [Phase 5 test matrix](docs/test-results.md) runs via `npm test`, app deployed to <https://mutual-fund-faq-assistant-five.vercel.app/>, a weekday GitHub Actions cron ([.github/workflows/refresh-corpus.yml](.github/workflows/refresh-corpus.yml)) re-runs the ingestion pipeline and opens a refresh PR, and the README setup steps were validated against a fresh clone of this repo (Phase 8 gate). See [ARCHITECTURE.md §6](ARCHITECTURE.md) for the full plan.
 
 ## Test results (Phase 5)
 
@@ -62,13 +62,16 @@ The full 58-case matrix (`npm test -- --url <prod>` without `--smoke`) requires 
 
 Hybrid retrieval: a curated `corpus/facts.json` answers numeric facts deterministically (with citations), while RAG over `corpus/index.json` handles open-ended questions. A request flows through a PII guard → intent classifier → router → facts/RAG → answer assembler (≤ 3 sentences, one citation, dated footer). Full detail in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-**Stack:** Next.js (App Router, TypeScript) · Gemini 2.0 Flash · Gemini `text-embedding-004` · in-memory cosine retrieval · Vercel.
+**Stack:** Next.js 15 (App Router, TypeScript) · Gemini `gemini-2.5-flash-lite` (generation) · Gemini `gemini-embedding-001` at 768 dims (embedding) · in-memory cosine retrieval · Vercel.
+
+> ARCHITECTURE.md §1 originally locked `gemini-2.0-flash` + `text-embedding-004`. Google retired both from the free tier during the build; current pins are 100% protocol-compatible (same vendor, JSON-mode generation, asymmetric `RETRIEVAL_QUERY`/`RETRIEVAL_DOCUMENT` task types). The generation model is overridable via the `GEMINI_GEN_MODEL` env var — useful when one model's free-tier daily quota is burned (see [docs/edge-cases.md 7.15](docs/edge-cases.md)).
 
 ## Setup
 
 ### Prerequisites
-- Node.js 20+
-- A Google Gemini API key — create one at <https://aistudio.google.com/apikey>
+- **Node.js 20+** — verify with `node --version`
+- **A Google Gemini API key** — create one at <https://aistudio.google.com/apikey> (free tier is sufficient for local use)
+- **PowerShell on Windows** if you're on Windows — the project was built on Windows and a couple of helper commands use PowerShell syntax (clearly marked)
 
 ### Install & run locally
 
@@ -76,15 +79,57 @@ Hybrid retrieval: a curated `corpus/facts.json` answers numeric facts determinis
 npm install
 ```
 
-Copy `.env.local.example` to `.env.local` and add your `GEMINI_API_KEY`, then:
+Set up your API key:
+
+```bash
+# macOS / Linux
+cp .env.local.example .env.local
+
+# Windows PowerShell
+Copy-Item .env.local.example .env.local
+```
+
+Then edit `.env.local` and replace the placeholder with your real `GEMINI_API_KEY`.
 
 ```bash
 npm run dev
 ```
 
-Open <http://localhost:3000>.
+Open <http://localhost:3000>. The first request takes a moment (cold-start + first Gemini call); subsequent requests are fast.
 
-> Phase 2 adds the ingestion dependencies (`playwright`, `pdf-parse`, `cheerio`). They are intentionally not installed yet to keep the Phase 0 install lean.
+### Re-build the corpus (optional)
+
+The repo ships with `corpus/index.json` and `corpus/facts.json` already built (commit `1e43303` onward), so you don't need to run the ingestion pipeline to use the app. If you want to rebuild from scratch:
+
+```bash
+npm run ingest    # 1-fetch → 2-extract → 3-build-index → 4-build-facts
+```
+
+This makes ~5 Gemini generation calls (one per scheme, for fact extraction) and ~170 embedding calls. Free-tier daily quota fits one run easily.
+
+### Run the test matrix
+
+```bash
+# 58-case matrix against the local handler (in-process, no dev server needed)
+npm test
+
+# 15-case smoke (LLM-free) — finishes in seconds; safe to run when classifier quota is exhausted
+npm test -- --smoke
+
+# Point the same matrix at your deployed Vercel URL
+npm test -- --url https://<your-deployment>.vercel.app
+
+# Both flags compose
+npm test -- --url https://<your-deployment>.vercel.app --smoke
+
+# Override the generation model (useful when one model is rate-limited)
+# PowerShell:
+$env:GEMINI_GEN_MODEL = "gemini-flash-latest"; npm test
+# bash:
+GEMINI_GEN_MODEL=gemini-flash-latest npm test
+```
+
+Results write to [docs/test-results.md](docs/test-results.md) (full run) or [docs/test-results-smoke.md](docs/test-results-smoke.md) (smoke). The harness exits non-zero on any real failure — CI-friendly.
 
 ## Deployment
 
@@ -175,11 +220,13 @@ Two `workflow_dispatch` runs were executed on 2026-05-16 to validate the setup:
 ## Project structure
 
 ```
-app/            Next.js App Router — UI + /api/ask endpoint
-lib/            PII guard, classifier, facts lookup, retriever, Gemini client, answer assembly
-corpus/         sources.json manifest, raw/ snapshots, index.json + facts.json (built artifacts)
-scripts/        Offline ingestion pipeline (1-fetch → 2-extract → 3-build-index → 4-build-facts)
-data/prompts/   System prompts
+app/            Next.js App Router — UI (page.tsx) + /api/ask endpoint
+lib/            PII guard, classifier, facts lookup, retriever, Gemini client, answer assembly, shared types
+corpus/         sources.json manifest, raw/ snapshots, extracted/ text (gitignored), index.json + facts.json (built, committed)
+scripts/        Offline ingestion pipeline (1-fetch → 2-extract → 3-build-index → 4-build-facts) + 5-test.ts (Phase 5 harness)
+docs/           edge-cases.md (failure-mode catalogue), test-results.md + test-results-smoke.md (latest npm test output)
+.github/        workflows/refresh-corpus.yml — weekday corpus refresh cron (Phase 7)
+data/prompts/   System prompt snippets (currently empty placeholder)
 ```
 
 ## Known limitations

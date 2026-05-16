@@ -9,8 +9,8 @@
 | Area | Decision | Why |
 |---|---|---|
 | **Data sources** | Official only — `hdfcfund.com` (HDFC AMC) + AMFI + SEBI + CAMS / MF Central | Brief bans aggregators; Groww is one. Groww is **UI inspiration only**, never a citation. |
-| **LLM** | **Gemini 2.0 Flash** (answer synthesis + query classification) | Genuinely free tier; one vendor for generation *and* embeddings; ample for a guardrail-heavy, facts-only app. |
-| **Embeddings** | Gemini `text-embedding-004` | Same vendor, free tier, no extra account. |
+| **LLM** | Original: **Gemini 2.0 Flash**. Build-time pin: **`gemini-2.5-flash-lite`** (Google retired 2.0-flash from the free tier mid-build; lite is the protocol-compatible replacement, same JSON-mode + temperature controls). Overridable via `GEMINI_GEN_MODEL` env var for test harness fallback. | Genuinely free tier; one vendor for generation *and* embeddings; ample for a guardrail-heavy, facts-only app. |
+| **Embeddings** | Original: **`text-embedding-004`**. Build-time pin: **`gemini-embedding-001`** with `outputDimensionality: 768` (same vector shape, same `RETRIEVAL_QUERY`/`RETRIEVAL_DOCUMENT` task types). | Same vendor, free tier, no extra account. |
 | **Retrieval store** | **In-memory static index** — embeddings baked into `index.json` at build time, cosine similarity in the API route | Corpus is ~15–25 pages (~150–300 chunks). Zero infra, zero cost, no cold-start. |
 | **Architecture** | **Hybrid** — curated `facts.json` (deterministic) + RAG (open-ended) | Prevents the #1 failure mode: retrieving the *wrong scheme's* numbers. |
 | **Framework / host** | Next.js (App Router, TypeScript) on Vercel free tier | Native Vercel fit; frontend + serverless API in one repo. |
