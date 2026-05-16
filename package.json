@@ -1,0 +1,35 @@
+{
+  "name": "mutual-fund-faq-assistant",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "ingest": "tsx scripts/1-fetch.ts && tsx scripts/2-extract.ts && tsx scripts/3-build-index.ts && tsx scripts/4-build-facts.ts",
+    "test": "tsx scripts/5-test.ts"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "@types/pdf-parse": "^1.1.4",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "autoprefixer": "^10.4.20",
+    "cheerio": "^1.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.0.0",
+    "pdf-parse": "^1.1.1",
+    "playwright": "^1.49.1",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

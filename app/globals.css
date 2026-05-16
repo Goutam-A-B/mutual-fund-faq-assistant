@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Material 3 design tokens. Seed = a Groww-derivative vibrant green (#00D09C);
+ * the actual `primary` is the AA-contrast tone derived from it, while the seed
+ * itself appears only as a decorative accent (`--md-brand`). All component
+ * colors are referenced as CSS variables so Tailwind can map them to utility
+ * classes (see tailwind.config.ts) and dark mode is one media-query switch.
+ */
+:root {
+  /* Color — light scheme */
+  --md-primary: #007f5f;
+  --md-on-primary: #ffffff;
+  --md-primary-container: #bdf2d6;
+  --md-on-primary-container: #002113;
+  --md-secondary: #4c6358;
+  --md-on-secondary: #ffffff;
+  --md-secondary-container: #cfe9da;
+  --md-on-secondary-container: #082019;
+  --md-tertiary: #006970;
+  --md-on-tertiary: #ffffff;
+  --md-error: #ba1a1a;
+  --md-on-error: #ffffff;
+  --md-error-container: #ffdad6;
+  --md-on-error-container: #410002;
+  --md-background: #fbfdf8;
+  --md-on-background: #181d1b;
+  --md-surface: #fbfdf8;
+  --md-on-surface: #181d1b;
+  --md-surface-variant: #dce5dd;
+  --md-on-surface-variant: #404944;
+  --md-outline: #707974;
+  --md-outline-variant: #bfc9c3;
+  --md-surface-container-lowest: #ffffff;
+  --md-surface-container-low: #f5f7f2;
+  --md-surface-container: #eff1ec;
+  --md-surface-container-high: #e9ebe7;
+  --md-surface-container-highest: #e3e5e2;
+  /* Groww-derivative brand accent — decorative use only (logo dot, hover tint) */
+  --md-brand: #00d09c;
+  --md-brand-soft: rgba(0, 208, 156, 0.12);
+
+  /* State-layer opacities (M3 spec) */
+  --md-state-hover: 0.08;
+  --md-state-focus: 0.12;
+  --md-state-pressed: 0.12;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --md-primary: #6bdbaa;
+    --md-on-primary: #00382a;
+    --md-primary-container: #00513d;
+    --md-on-primary-container: #87f8c5;
+    --md-secondary: #b3ccbe;
+    --md-on-secondary: #1f352b;
+    --md-secondary-container: #354b41;
+    --md-on-secondary-container: #cfe9da;
+    --md-tertiary: #80d1da;
+    --md-on-tertiary: #003740;
+    --md-error: #ffb4ab;
+    --md-on-error: #690005;
+    --md-error-container: #93000a;
+    --md-on-error-container: #ffdad6;
+    --md-background: #0f1411;
+    --md-on-background: #dee4df;
+    --md-surface: #0f1411;
+    --md-on-surface: #dee4df;
+    --md-surface-variant: #404944;
+    --md-on-surface-variant: #bfc9c3;
+    --md-outline: #899392;
+    --md-outline-variant: #404944;
+    --md-surface-container-lowest: #090d0b;
+    --md-surface-container-low: #181d1b;
+    --md-surface-container: #1b211e;
+    --md-surface-container-high: #262b29;
+    --md-surface-container-highest: #313633;
+    --md-brand: #00d09c;
+    --md-brand-soft: rgba(0, 208, 156, 0.18);
+  }
+}
+
+html,
+body {
+  background: var(--md-background);
+  color: var(--md-on-background);
+}
+
+/* M3 typography scale, mapped to Tailwind-friendly utility class names */
+.text-display-small {
+  font-size: 2.25rem; /* 36px */
+  line-height: 2.75rem; /* 44px */
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.text-headline-medium {
+  font-size: 1.75rem; /* 28px */
+  line-height: 2.25rem; /* 36px */
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.text-title-large {
+  font-size: 1.375rem; /* 22px */
+  line-height: 1.75rem;
+  font-weight: 500;
+}
+.text-title-medium {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.009375rem; /* 0.15px */
+}
+.text-body-large {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.03125rem; /* 0.5px */
+}
+.text-body-medium {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.015625rem; /* 0.25px */
+}
+.text-label-large {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.00625rem; /* 0.1px */
+}
+.text-label-small {
+  font-size: 0.6875rem; /* 11px */
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.03125rem; /* 0.5px */
+}
+
+/* Subtle decorative texture: a single radial highlight in Groww-brand green
+ * behind the hero. Kept very low alpha so it reads as warmth, not as a CTA. */
+.hero-glow {
+  background: radial-gradient(
+    900px 360px at 12% 0%,
+    var(--md-brand-soft) 0%,
+    transparent 60%
+  );
+}
+
+/* Small entrance for response cards — M3 doesn't ship animation utilities by
+ * name, and we don't need tailwindcss-animate just for this one effect. */
+@keyframes m3-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: m3-fade-in 180ms ease-out both;
+}
+
+/* Respect users who've asked the OS to reduce motion. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
+}
