@@ -33,6 +33,14 @@ interface BaseCase {
   question: string;
   expect: Expect;
   notes?: string;
+  /**
+   * True if the case is handled BEFORE the classifier LLM call (PII guard,
+   * advisory rule pre-filter, performance rule pre-filter, empty-query
+   * early return). The `--smoke` flag filters to these so production can be
+   * health-checked even when the free-tier daily classifier quota is
+   * exhausted — they're deterministic and never depend on the LLM.
+   */
+  llmFree?: boolean;
 }
 
 type Bucket = "facts" | "rag" | "advisory" | "pii" | "out_of_scope" | "performance" | "edge";
@@ -166,75 +174,89 @@ const RAG_CASES: BaseCase[] = [
   },
 ];
 
+// All 5 phrasings are caught by ADVISORY_PATTERNS in lib/classifier.ts —
+// the rule pre-filter short-circuits before any LLM call.
 const ADVISORY_CASES: BaseCase[] = [
   {
     id: "advisory:should-i-buy",
     bucket: "advisory",
     question: "Should I buy HDFC ELSS Tax Saver?",
     expect: { type: "refusal", intent: "advisory", citation: true },
+    llmFree: true,
   },
   {
     id: "advisory:is-it-good",
     bucket: "advisory",
     question: "Is HDFC Flexi Cap a good fund to invest in?",
     expect: { type: "refusal", intent: "advisory", citation: true },
+    llmFree: true,
   },
   {
     id: "advisory:which-is-better",
     bucket: "advisory",
     question: "Which is better — HDFC Mid-Cap or HDFC Flexi Cap?",
     expect: { type: "refusal", intent: "advisory", citation: true },
+    llmFree: true,
   },
   {
     id: "advisory:recommend",
     bucket: "advisory",
     question: "Can you recommend an HDFC fund for long-term investing?",
     expect: { type: "refusal", intent: "advisory", citation: true },
+    llmFree: true,
   },
   {
     id: "advisory:worth-it",
     bucket: "advisory",
     question: "Is HDFC Top 100 worth investing in right now?",
     expect: { type: "refusal", intent: "advisory", citation: true },
+    llmFree: true,
   },
 ];
 
+// PII guard runs FIRST — before the classifier — so every PII case is LLM-free.
 const PII_CASES: BaseCase[] = [
   {
     id: "pii:pan",
     bucket: "pii",
     question: "My PAN is ABCDE1234F — what's the expense ratio of HDFC ELSS?",
     expect: { type: "pii_blocked", intent: null, citation: false },
+    llmFree: true,
   },
   {
     id: "pii:aadhaar-spaced",
     bucket: "pii",
     question: "Aadhaar 1234 5678 9012, what is the min SIP for HDFC Flexi Cap?",
     expect: { type: "pii_blocked", intent: null, citation: false },
+    llmFree: true,
   },
   {
     id: "pii:phone-plus91",
     bucket: "pii",
     question: "Please call me on +91 9876543210 about HDFC Mid-Cap.",
     expect: { type: "pii_blocked", intent: null, citation: false },
+    llmFree: true,
   },
   {
     id: "pii:email",
     bucket: "pii",
     question: "Email me at investor@example.com the lock-in for HDFC ELSS.",
     expect: { type: "pii_blocked", intent: null, citation: false },
+    llmFree: true,
   },
   {
     id: "pii:otp",
     bucket: "pii",
     question: "My OTP is 482910 — process my SIP request.",
     expect: { type: "pii_blocked", intent: null, citation: false },
+    llmFree: true,
   },
   {
     id: "pii:account",
     bucket: "pii",
     question: "My account number 987654321 — what's the exit load on HDFC Flexi Cap?",
     expect: { type: "pii_blocked", intent: null, citation: false },
+    llmFree: true,
   },
 ];
 
@@ -271,12 +293,16 @@ const OUT_OF_SCOPE_CASES: BaseCase[] = [
   },
 ];
 
+// `returns`, `nav`, `cagr` match PERFORMANCE_PATTERNS → rule pre-filter, no
+// LLM. `performed` doesn't (the regex matches the noun `performance`, not
+// the past-tense verb), so the "soft" case still needs the classifier.
 const PERFORMANCE_CASES: BaseCase[] = [
   {
     id: "perf:returns-explicit",
     bucket: "performance",
     question: "What are the 3-year returns of HDFC Mid-Cap Opportunities?",
     expect: { type: "out_of_scope", intent: "out_of_scope", citation: true },
+    llmFree: true,
   },
   {
     id: "perf:performance-soft",
@@ -289,12 +315,14 @@ const PERFORMANCE_CASES: BaseCase[] = [
     bucket: "performance",
     question: "What is the current NAV of HDFC ELSS Tax Saver?",
     expect: { type: "out_of_scope", intent: "out_of_scope", citation: true },
+    llmFree: true,
   },
   {
     id: "perf:cagr",
     bucket: "performance",
     question: "What's the CAGR of HDFC Large Cap Fund over 5 years?",
     expect: { type: "out_of_scope", intent: "out_of_scope", citation: true },
+    llmFree: true,
   },
 ];
 
@@ -304,6 +332,7 @@ const EDGE_CASES: BaseCase[] = [
     bucket: "edge",
     question: "",
     expect: { type: "out_of_scope", intent: "out_of_scope" },
+    llmFree: true,
   },
   {
     id: "edge:fact-no-scheme",
@@ -438,6 +467,7 @@ function validate(c: BaseCase, res: AskResponse): string[] {
  * production runs after quota reset get clean results).
  */
 const REMOTE_URL = parseUrlFlag();
+const SMOKE_MODE = process.argv.includes("--smoke");
 
 function parseUrlFlag(): string | null {
   const argIdx = process.argv.indexOf("--url");
@@ -560,9 +590,10 @@ function renderMarkdown(results: CaseResult[]): string {
   lines.push("# Phase 5 — Test results");
   lines.push("");
   const targetTag = REMOTE_URL ? `remote: \`${REMOTE_URL}\`` : "target: in-process";
+  const modeTag = SMOKE_MODE ? ", **SMOKE mode** — LLM-free cases only" : "";
   lines.push(
     `_Generated by \`npm test\` on ${new Date().toISOString().slice(0, 10)} ` +
-      `(generation model: \`${process.env.GEMINI_GEN_MODEL?.trim() || "gemini-2.5-flash-lite"}\`, ${targetTag})._`,
+      `(generation model: \`${process.env.GEMINI_GEN_MODEL?.trim() || "gemini-2.5-flash-lite"}\`, ${targetTag}${modeTag})._`,
   );
   lines.push("");
   if (sum.blocked > 0) {
@@ -622,15 +653,20 @@ function renderMarkdown(results: CaseResult[]): string {
  * factual tests as "refusal". Pacing keeps the tests honest. Override via
  * the TEST_DELAY_MS env var when iterating.
  */
-const PACE_MS = Number(process.env.TEST_DELAY_MS ?? "2500");
+// Default pace handles classifier rate-limits at ~24 LLM calls/min (under the
+// 30 RPM free-tier ceiling). Smoke mode makes zero LLM calls so it can sprint.
+const DEFAULT_PACE_MS = process.argv.includes("--smoke") ? 100 : 2500;
+const PACE_MS = Number(process.env.TEST_DELAY_MS ?? String(DEFAULT_PACE_MS));
 
 async function main(): Promise<void> {
   loadEnv();
   const target = REMOTE_URL ? `remote ${REMOTE_URL}` : "in-process POST handler";
-  console.log(`[test] running ${ALL_CASES.length} cases (pace ${PACE_MS}ms, target: ${target})`);
+  const cases = SMOKE_MODE ? ALL_CASES.filter((c) => c.llmFree) : ALL_CASES;
+  const modeTag = SMOKE_MODE ? " [SMOKE — LLM-free cases only]" : "";
+  console.log(`[test] running ${cases.length} cases (pace ${PACE_MS}ms, target: ${target})${modeTag}`);
   const results: CaseResult[] = [];
-  for (let i = 0; i < ALL_CASES.length; i++) {
-    const c = ALL_CASES[i];
+  for (let i = 0; i < cases.length; i++) {
+    const c = cases[i];
     if (i > 0) await sleep(PACE_MS);
     try {
       const r = await runCase(c);
@@ -683,7 +719,9 @@ async function main(): Promise<void> {
   }
 
   const out = renderMarkdown(results);
-  const outPath = join(ROOT, "docs", "test-results.md");
+  // Don't clobber the full Phase 5 results when running the smoke subset.
+  const outName = SMOKE_MODE ? "test-results-smoke.md" : "test-results.md";
+  const outPath = join(ROOT, "docs", outName);
   writeFileSync(outPath, out, "utf8");
   console.log(`[test] wrote ${outPath}`);
 

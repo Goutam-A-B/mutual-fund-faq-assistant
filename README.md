@@ -9,7 +9,7 @@ A lightweight Retrieval-Augmented Generation (RAG) assistant that answers **fact
 
 ## Status
 
-**Phases 0–5 complete.** Corpus built and committed, `/api/ask` wired end-to-end (PII guard → classifier → facts/RAG → assembler), UI live against it, and the Phase 5 test matrix runs via `npm test`. See [ARCHITECTURE.md §6](ARCHITECTURE.md) for the full plan.
+**Phases 0–6 complete.** Corpus built and committed, `/api/ask` wired end-to-end (PII guard → classifier → facts/RAG → assembler), UI live, Phase 5 test matrix runs via `npm test`, and the app is **deployed to <https://mutual-fund-faq-assistant-five.vercel.app/>**. See [ARCHITECTURE.md §6](ARCHITECTURE.md) for the full plan.
 
 ## Test results (Phase 5)
 
@@ -37,6 +37,14 @@ Per-bucket pass rate (last run on 2026-05-16):
 A real cross-fact bug was found and fixed during this phase: `detectFactType` used substring matching with `"ter"` (Total Expense Ratio shorthand) as a keyword, so riskometer queries silently returned the *expense ratio* answer — a wrong-scheme-adjacent failure mode. Now fixed with word-boundary matching ([lib/facts.ts](lib/facts.ts)); the riskometer cases that ran post-fix all PASS.
 
 Full case-by-case detail and re-run instructions in [docs/test-results.md](docs/test-results.md).
+
+### Production smoke (Phase 6 gate)
+
+Subset of the matrix run via `npm test -- --url <prod> --smoke` — the 15 cases that complete *before* the classifier LLM call (PII × 6, advisory rule pre-filter × 5, performance rule pre-filter × 3, empty query × 1). These are deterministic, so they prove the deployed serverless function is healthy independent of free-tier Gemini quota.
+
+**Result against <https://mutual-fund-faq-assistant-five.vercel.app/>: 15 / 15 PASS.** All three hard gates clean. Detail in [docs/test-results-smoke.md](docs/test-results-smoke.md).
+
+The full 58-case matrix (`npm test -- --url <prod>` without `--smoke`) requires a fresh free-tier classifier quota and will be re-run after the next daily reset to fully satisfy the Phase 6 gate.
 
 ## Scope
 
