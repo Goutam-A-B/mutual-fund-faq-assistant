@@ -8,10 +8,10 @@ name: Refresh corpus
 
 on:
   schedule:
-    # 03:30 UTC, Mon–Fri (= 09:00 IST). Cron is always UTC on GitHub
+    # 04:00 UTC, Mon–Fri (= 09:30 IST). Cron is always UTC on GitHub
     # (edge case 7.11). Weekdays-only keeps the weekend PR queue quiet
     # and the daily gen-model quota burn predictable.
-    - cron: "30 3 * * 1-5"
+    - cron: "0 4 * * 1-5"
   workflow_dispatch: {}
 
 permissions:
@@ -80,7 +80,7 @@ jobs:
             corpus-refresh
             automated
           body: |
-            Automated monthly corpus refresh.
+            Automated weekday corpus refresh.
 
             **Review the `corpus/facts.json` diff carefully before merging.**
             The numeric facts (expense ratio, exit load, min SIP, lock-in,
