@@ -7,7 +7,7 @@
     "title": "HDFC Mid Cap Fund — Direct Growth (official scheme page)",
     "url": "https://www.hdfcfund.com/explore/mutual-funds/hdfc-mid-cap-fund/direct",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-midcap-scheme-page.html",
     "notes": "Verified 2026-05-14. Carries expense ratio, exit load, min SIP, riskometer, benchmark; links to this scheme's SID, KIM and factsheet."
   },
@@ -19,7 +19,7 @@
     "title": "HDFC Flexi Cap Fund — Direct Growth (official scheme page)",
     "url": "https://www.hdfcfund.com/explore/mutual-funds/hdfc-flexi-cap-fund/direct",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-flexicap-scheme-page.html",
     "notes": "Verified 2026-05-14. ex-HDFC Equity Fund. Carries expense ratio, exit load, min SIP, riskometer, benchmark; links to SID, KIM and factsheet."
   },
@@ -31,7 +31,7 @@
     "title": "HDFC Focused Fund — Direct Growth (official scheme page)",
     "url": "https://www.hdfcfund.com/explore/mutual-funds/hdfc-focused-fund/direct",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-focused-scheme-page.html",
     "notes": "Verified 2026-05-14. ex-HDFC Focused 30 Fund. Carries expense ratio, exit load, min SIP, riskometer, benchmark; links to SID, KIM and factsheet."
   },
@@ -43,7 +43,7 @@
     "title": "HDFC ELSS Tax Saver — Direct Growth (official scheme page)",
     "url": "https://www.hdfcfund.com/explore/mutual-funds/hdfc-elss-tax-saver/direct",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-elss-scheme-page.html",
     "notes": "Verified 2026-05-14. ex-HDFC TaxSaver. Carries expense ratio, exit load, min SIP, the 3-year ELSS lock-in, riskometer, benchmark; links to SID, KIM and factsheet."
   },
@@ -55,7 +55,7 @@
     "title": "HDFC Large Cap Fund — Direct Growth (official scheme page)",
     "url": "https://www.hdfcfund.com/explore/mutual-funds/hdfc-large-cap-fund/direct",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-largecap-scheme-page.html",
     "notes": "Verified 2026-05-14. ex-HDFC Top 100 Fund. Carries expense ratio, exit load, min SIP, riskometer, benchmark; links to SID, KIM and factsheet."
   },
@@ -67,7 +67,7 @@
     "title": "HDFC Mutual Fund — Fund Factsheets",
     "url": "https://www.hdfcfund.com/investor-services/factsheets",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-factsheets-hub.html",
     "notes": "Verified 2026-05-14. Monthly consolidated factsheet; latest per Mid-Cap scheme page is dated 26-Apr-2026. Phase 2 resolves the current PDF link from here."
   },
@@ -79,7 +79,7 @@
     "title": "HDFC Mutual Fund — Fund Documents (KIM / SID / Scheme Summary)",
     "url": "https://www.hdfcfund.com/investor-services/fund-documents/kim",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-fund-documents-kim.html",
     "notes": "Verified 2026-05-14. Has KIM, SID and Scheme Summary tabs; lists per-scheme PDFs (current KIMs dated 21-Nov-2025). Phase 2 resolves per-scheme KIM/SID PDFs from here."
   },
@@ -91,7 +91,7 @@
     "title": "HDFC Large Cap Fund — Scheme Information Document",
     "url": "https://files.hdfcfund.com/s3fs-public/SID/2025-05/SID%20-%20HDFC%20Large%20Cap%20Fund%20dated%20May%2030,%202025.pdf",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-largecap-sid.pdf",
     "notes": "Dated SID PDF (30-May-2025). Phase 2 should re-check the KIM/SID hub for a newer version before snapshotting."
   },
@@ -103,7 +103,7 @@
     "title": "HDFC Large Cap Fund — Key Information Memorandum",
     "url": "https://files.hdfcfund.com/s3fs-public/KIM/2025-05/KIM%20-%20HDFC%20Large%20Cap%20Fund%20dated%20May%2030,%202025.pdf",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-largecap-kim.pdf",
     "notes": "Dated KIM PDF (30-May-2025). Phase 2 should re-check the KIM/SID hub for a newer version before snapshotting."
   },
@@ -115,7 +115,7 @@
     "title": "HDFC Mutual Fund — Total Expense Ratio of Mutual Fund Schemes",
     "url": "https://www.hdfcfund.com/statutory-disclosure/total-expense-ratio-of-mutual-fund-schemes/reports",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-ter-reports.html",
     "notes": "Verified 2026-05-14. Links to the monthly TER report (latest: May 2026) with per-scheme expense ratios. Authoritative source for expense-ratio facts."
   },
@@ -127,7 +127,7 @@
     "title": "HDFC Mutual Fund — Statutory Disclosures",
     "url": "https://www.hdfcfund.com/statutory-disclosure",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-statutory-disclosure.html",
     "notes": "Parent statutory-disclosure index (TER, valuation policy, portfolios, addenda)."
   },
@@ -139,7 +139,7 @@
     "title": "HDFC Mutual Fund — Investor FAQs (General)",
     "url": "https://www.hdfcfund.com/investor-services/investor-faq/general",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-investor-faq-general.html",
     "notes": "Verified 2026-05-14. Covers KYC/CKYC, SIP, redemptions, account statements, nominee, demat units, NRI/minor investing."
   },
@@ -151,7 +151,7 @@
     "title": "HDFC Mutual Fund — Download Consolidated Account Statement",
     "url": "https://www.hdfcfund.com/services/consolidated-account-statement",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-consolidated-account-statement.html",
     "notes": "Verified 2026-05-14. Explains PAN-based vs folio-based statements and the OTP-based download flow; free of charge."
   },
@@ -163,7 +163,7 @@
     "title": "HDFC Mutual Fund — Request Statement",
     "url": "https://www.hdfcfund.com/services/additional-info/request-statement",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-request-statement.html",
     "notes": "Channels to request statements (call centre, SMS, ISC, email Smart Account Statement)."
   },
@@ -175,7 +175,7 @@
     "title": "HDFC Mutual Fund — How to Get a Capital Gain Statement",
     "url": "https://www.hdfcfund.com/learn/blog/how-get-capital-gain-statement-mutual-fund-schemes-india",
     "publisher": "HDFC AMC",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/hdfc-capital-gains-statement-guide.html",
     "notes": "HDFC's own (first-party) educational guide on obtaining a capital-gains statement — not a third-party blog."
   },
@@ -187,7 +187,7 @@
     "title": "AMFI — Risk-o-Meter",
     "url": "https://www.amfiindia.com/online-center/risk-o-meter",
     "publisher": "AMFI",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/amfi-riskometer.html",
     "notes": "Industry reference for what the riskometer means and its risk bands."
   },
@@ -199,7 +199,7 @@
     "title": "AMFI — Introduction to Mutual Funds",
     "url": "https://www.amfiindia.com/investor/knowledge-center-info?zoneName=IntroductionMutualFunds",
     "publisher": "AMFI",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/amfi-intro-mutual-funds.html",
     "notes": "Definitions (NAV, scheme types, SIP). Good educational link for refusal responses."
   },
@@ -211,7 +211,7 @@
     "title": "AMFI — Investor Corner",
     "url": "https://www.amfiindia.com/investor",
     "publisher": "AMFI",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/amfi-investor-corner.html",
     "notes": "AMFI investor education hub; default educational link for advisory-query refusals."
   },
@@ -223,7 +223,7 @@
     "title": "SEBI Investor — Understanding the Riskometer",
     "url": "https://investor.sebi.gov.in/riskometer.html",
     "publisher": "SEBI",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/sebi-riskometer-investor.html",
     "notes": "SEBI investor-education explanation of the riskometer's five risk bands."
   },
@@ -235,7 +235,7 @@
     "title": "SEBI — FAQs for Mutual Fund Investors",
     "url": "https://www.sebi.gov.in/sebi_data/faqfiles/sep-2024/1727242783639.pdf",
     "publisher": "SEBI",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/sebi-mf-investor-faqs.pdf",
     "notes": "SEBI's official FAQ PDF for mutual fund investors (Sep 2024)."
   },
@@ -247,7 +247,7 @@
     "title": "SEBI Circular — Disclosure of Risk-o-meter, Benchmark and Portfolio",
     "url": "https://www.sebi.gov.in/legal/circulars/aug-2021/disclosure-of-risk-o-meter-of-scheme-benchmark-and-portfolio-details-to-the-investors_52262.html",
     "publisher": "SEBI",
-    "fetchedAt": "2026-05-20",
+    "fetchedAt": "2026-05-29",
     "localSnapshot": "corpus/raw/sebi-riskometer-circular.html",
     "notes": "Regulatory basis for riskometer and benchmark disclosure to investors."
   }

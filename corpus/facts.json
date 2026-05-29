@@ -2,165 +2,165 @@
   "HDFC ELSS Tax Saver": {
     "category": "ELSS",
     "expenseRatio": {
-      "value": "1.18%",
-      "asOf": "2026-05-20",
+      "value": "1.11%",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-elss-scheme-page"
     },
     "exitLoad": {
       "value": "Nil",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-elss-scheme-page"
     },
     "minSIP": {
       "value": "₹500",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-elss-scheme-page"
     },
     "riskometer": {
       "value": "Very High",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-elss-scheme-page"
     },
     "benchmark": {
       "value": "NIFTY 500 Total Returns Index",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-elss-scheme-page"
     },
     "lockIn": {
       "value": "3 years",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-elss-scheme-page"
     }
   },
   "HDFC Flexi Cap Fund": {
     "category": "Flexi Cap",
     "expenseRatio": {
-      "value": "1.01%",
-      "asOf": "2026-05-20",
+      "value": "0.80%",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-flexicap-scheme-page"
     },
     "exitLoad": {
       "value": "1.00% is payable if Units are redeemed / switched-out within 1 year from the date of allotment.",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-flexicap-scheme-page"
     },
     "minSIP": {
       "value": "₹100",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-flexicap-scheme-page"
     },
     "riskometer": {
       "value": "Very High",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-flexicap-scheme-page"
     },
     "benchmark": {
-      "value": "NIFTY 500 Total Returns Index",
-      "asOf": "2026-05-20",
+      "value": "NIFTY 500 Total Returns Index (TRI)",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-flexicap-scheme-page"
     },
     "lockIn": {
       "value": "Not applicable",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-flexicap-scheme-page"
     }
   },
   "HDFC Focused Fund": {
     "category": "Focused",
     "expenseRatio": {
-      "value": "0.71%",
-      "asOf": "2026-05-20",
+      "value": "0.72%",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-focused-scheme-page"
     },
     "exitLoad": {
       "value": "1.00% is payable if Units are redeemed/switched-out within 1 year from the date of allotment.",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-focused-scheme-page"
     },
     "minSIP": {
       "value": "₹100",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-focused-scheme-page"
     },
     "riskometer": {
       "value": "Very High",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-focused-scheme-page"
     },
     "benchmark": {
       "value": "NIFTY 500 Total Returns Index (TRI)",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-focused-scheme-page"
     },
     "lockIn": {
       "value": "Not applicable",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-focused-scheme-page"
     }
   },
   "HDFC Large Cap Fund": {
     "category": "Large Cap",
     "expenseRatio": {
-      "value": "0.99%",
-      "asOf": "2026-05-20",
+      "value": "1.06%",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-largecap-scheme-page"
     },
     "exitLoad": {
       "value": "1.00% is payable if Units are redeemed/switched-out within 1 year from the date of allotment.",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-largecap-scheme-page"
     },
     "minSIP": {
       "value": "₹100",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-largecap-scheme-page"
     },
     "riskometer": {
       "value": "Very High",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-largecap-scheme-page"
     },
     "benchmark": {
       "value": "NIFTY 100 (Total Return Index)",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-largecap-scheme-page"
     },
     "lockIn": {
       "value": "Not applicable",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-largecap-scheme-page"
     }
   },
   "HDFC Mid-Cap Opportunities Fund": {
     "category": "Mid Cap",
     "expenseRatio": {
-      "value": "0.77%",
-      "asOf": "2026-05-20",
+      "value": "0.73%",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-midcap-scheme-page"
     },
     "exitLoad": {
       "value": "1.00% if redeemed/switched-out within 1 year from the date of allotment.",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-midcap-scheme-page"
     },
     "minSIP": {
       "value": "₹100",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-midcap-scheme-page"
     },
     "riskometer": {
       "value": "Very High",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-midcap-scheme-page"
     },
     "benchmark": {
-      "value": "NIFTY Midcap 150 Index TRI",
-      "asOf": "2026-05-20",
+      "value": "NIFTY Midcap 150 Index (Total Returns Index)",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-midcap-scheme-page"
     },
     "lockIn": {
       "value": "Not applicable",
-      "asOf": "2026-05-20",
+      "asOf": "2026-05-29",
       "sourceId": "hdfc-midcap-scheme-page"
     }
   }
